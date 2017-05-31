@@ -1,7 +1,7 @@
 # Author: Anthony Kai Kwang Ma
 # Email: anthonyma27@gmail.com, akma327@stanford.edu
 # Date: 04/29/17
-# batch_atomic_static_contacts_classA_gpcrs.py
+# batch_atomic_static_contacts_homology_models.py
 
 import os
 import sys
@@ -15,59 +15,35 @@ USAGE_STR = """
 # homology model or existing crystal structure. Includes atom identity 
 
 # Usage 
-# python batch_static_contacts_classA_gpcrs.py
-
-# Arguments
-# <-atomic> Optional flag to create atomic level detailed tables
-
-# Example
-python batch_static_contacts_classA_gpcrs.py
+# python batch_static_contacts_homology_models.py 
 
 """
 
+HADDED_HOMOLOGY_MODEL_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/structures/hadded-homology-models"
+STATIC_CONTACTS_HM_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/homology-models"
 
-HADDED_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/structures/classA-gpcr-pdbs"
-STATIC_CONTACTS_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs"
-PDB_TO_LIGAND_PATH = "/scratch/PI/rondror/akma327/DynamicNetworks/data/crystal-analysis/ligand-wetness/watermarks/tables/classA_GPCRs_known_ligands.tsv"
 
-def pdb_to_ligand():
+def compute_homology_model_contacts():
 	"""
-		Create mapping from pdb to ligand 
+		Compute static contacts for all homology models
 	"""
-	pdb_to_ligand_dict = {}
-	f = open(PDB_TO_LIGAND_PATH, 'r')
-	header = f.readline()
-	for line in f:
-		uniprot, class_code, pdb, ligand = line.strip().split("\t")
-		pdb_to_ligand_dict[pdb] = ligand
+	print("compute_homology_model_contacts ...")
 
-	return pdb_to_ligand_dict
-
-def compute_classA_gpcr_contacts():
-	"""
-		Compute static contacts for all class A gpcr crystals
-	"""
-	pdb_to_ligand_dict = pdb_to_ligand()
-	hadded_gpcr_paths = glob.glob(HADDED_CLASS_A_GPCR_PATH + "/*")
-	for i, gpcr_pdb_path in enumerate(hadded_gpcr_paths):
-		# if(i > 0): break
-		print(gpcr_pdb_path)
-		pdb, chain = gpcr_pdb_path.split("/")[-1].split("_")[0:2]
-		uniprot = getUniprotCode(pdb)
-		identifier = uniprot + "_" + pdb + "_" + chain
-
-		output_dir = STATIC_CONTACTS_CLASS_A_GPCR_PATH + "/" + identifier
-		output_contacts = output_dir + "/" + identifier + "_contacts.txt"
-
-		ligand = pdb_to_ligand_dict[pdb]
-		calc_command = "python StaticInteractionCalculator_water_indexed_crys.py " + gpcr_pdb_path + " " + output_contacts + " -interlist -sb -pc -ps -ts -vdw -hbbb -hbsb -hbss -wb -wb2 -lwb -lwb2 -hlb -hls -ligand " + ligand
+	hadded_hm_paths = glob.glob(HADDED_HOMOLOGY_MODEL_PATH + "/*")
+	for i, hm_pdb_path in enumerate(hadded_hm_paths):
+		# if(i > 1): break
+		print(hm_pdb_path)
+		uniprot = hm_pdb_path.split("/")[-1].split(".")[0]
+		output_dir = STATIC_CONTACTS_HM_PATH + "/" + uniprot
+		output_contacts = output_dir + "/" + uniprot + "_contacts.txt"
+		calc_command = "python StaticInteractionCalculator_water_indexed_crys.py " + hm_pdb_path + " " +  output_contacts + " -interlist -all"
 		os.chdir("/scratch/PI/rondror/akma327/DynamicNetworks/src/interaction-geometry")
 		os.system(calc_command)
 
 
 		### Convert the raw contacts.txt to UNIPROT_table.txt file 
 		RESI_TO_GPCRDB = genGpcrdbDict(uniprot)
-		output_table = output_dir + "/" + identifier + "_table.txt"
+		output_table = output_dir + "/" + uniprot + "_table.txt"
 		f = open(output_contacts, 'r')
 		fw = open(output_table, 'w')
 
@@ -114,6 +90,7 @@ def compute_classA_gpcr_contacts():
 				fw.write(gpcrdb1 + "\t" + gpcrdb2 + "\t" + atom_list + "\t" + contact_type + "\n")
 
 		fw.close()
+		
 
 		### Convert UNIPROT_table.txt to corresponding flareplot json files 
 		f2 = open(output_table, 'r')
@@ -131,7 +108,7 @@ def compute_classA_gpcr_contacts():
 
 		### Generate a json for every interaction type
 		for interaction_type in contact_type_to_edges:
-			output_json_path = output_dir + "/" + identifier + "_" + interaction_type + ".json"
+			output_json_path = output_dir + "/" + uniprot + "_" + interaction_type + ".json"
 			json_dict = node_dict
 			edges = []
 			for name1, name2 in contact_type_to_edges[interaction_type]:
@@ -143,7 +120,6 @@ def compute_classA_gpcr_contacts():
 
 
 if __name__ == "__main__":
-	compute_classA_gpcr_contacts()
-
+	compute_homology_model_contacts()
 
 

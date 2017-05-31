@@ -4,6 +4,23 @@ PDB_TO_UNIPROT_TABLE_PATH = "/scratch/PI/rondror/akma327/DynamicNetworks/data/cr
 GPCRDB_TABLE_PATH="/scratch/PI/rondror/akma327/DynamicNetworks/data/crystal-analysis/simulation-analysis/gpcrdb-freq-config/All_species_gpcrdb_numbers_strOnly.txt"
 
 
+def flipGpcrdbs(gpcrdb1, gpcrdb2):
+       if("LIG" in gpcrdb1): return False
+       elif("LIG" in gpcrdb2): return True
+
+       tm1, index1 = map(int, gpcrdb1.split("x"))
+       tm2, index2 = map(int, gpcrdb2.split("x"))
+
+       if(tm1 < tm2): 
+              return False
+       elif(tm1 == tm2):
+              if(index1 < index2):
+                     return False
+              else:
+                     return True
+       else:
+              return True
+
 def orderGpcrdbsAndResiAndAtom(gpcrdb1, gpcrdb2, resi1, resi2, atom1, atom2):
        """
               Return gpcrdb1 < gpcrdb2 ordered

@@ -24,7 +24,7 @@
 #################
 
 cd /scratch/PI/rondror/akma327/GPCRContacts/src/static-contacts
-python batch_static_contacts_classA_gpcrs.py
+python batch_atomic_static_contacts_classA_gpcrs.py
 
 
 
