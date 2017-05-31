@@ -56,15 +56,23 @@ def sort_paths(INPUT_FILES):
 
 
 def get_edge_and_frameDict(sorted_input_files, labels):
+	"""
+		sorted_input_files: Tables containing the gpcrdb pairs and atomic resolution interaction data 
+		labels: GPCR Receptor name 
+	"""
 	frameDict = {}
 	edge_dict = {}
+
+	# residue_to_atomic_contacts = {gpcrdb1:gpcrdb2: {receptor_index1: [list of atomic resolution contacts], ...}}
+	# {3x53:3x54: {0:[ALA168-N:VAL169-N, ALA168-O:VAL169-N,...], 1: []}}
+	residue_to_atomic_contacts = {} 
 	for i in range(len(sorted_input_files)):
 		p, label = sorted_input_files[i], labels[i]
 		frameDict[i] = label 
 
 		f = open(p, 'r')
 		for line in f:
-			gpcrdb1, gpcrdb2, res1, res2, itype = line.strip().split("\t")
+			gpcrdb1, gpcrdb2, atom_list, itype = line.strip().split("\t")
 			if(itype not in edge_dict):
 				edge_dict[itype] = {}
 			if((gpcrdb1, gpcrdb2) not in edge_dict[itype]):
