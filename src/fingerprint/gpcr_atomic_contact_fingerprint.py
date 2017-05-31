@@ -27,22 +27,22 @@ USAGE_STR = """
 # <INPUT_DIR_N>
 
 # Example
-OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/fingerprint/opioid"
+OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-fingerprint/opioid"
 INPUT_FILE_1="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/OPRM_MOUSE_4DKL_A/OPRM_MOUSE_4DKL_A_table.txt"
 INPUT_FILE_2="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/OPRD_HUMAN_4N6H_A/OPRD_HUMAN_4N6H_A_table.txt"
 INPUT_FILE_3="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/OPRK_HUMAN_4DJH_A/OPRK_HUMAN_4DJH_A_table.txt"
 INPUT_FILE_4="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/OPRX_HUMAN_4EA3_A/OPRX_HUMAN_4EA3_A_table.txt"
 cd /scratch/PI/rondror/akma327/GPCRContacts/src/fingerprint
-python gpcr_contact_fingerprint.py $OUTPUT_DIR $INPUT_FILE_1 $INPUT_FILE_2 $INPUT_FILE_3 $INPUT_FILE_4
+python gpcr_atomic_contact_fingerprint.py $OUTPUT_DIR $INPUT_FILE_1 $INPUT_FILE_2 $INPUT_FILE_3 $INPUT_FILE_4
 
 
-OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/fingerprint/muscarinic"
+OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-fingerprint/muscarinic"
 INPUT_FILE_1="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/ACM2_HUMAN_3UON_A/ACM2_HUMAN_3UON_A_table.txt"
 INPUT_FILE_2="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/ACM3_RAT_4DAJ_A/ACM3_RAT_4DAJ_A_table.txt"
 INPUT_FILE_3="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/ACM1_HUMAN_5CXV_A/ACM1_HUMAN_5CXV_A_table.txt"
 INPUT_FILE_4="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs/ACM4_HUMAN_5DSG_A/ACM4_HUMAN_5DSG_A_table.txt"
 cd /scratch/PI/rondror/akma327/GPCRContacts/src/fingerprint
-python gpcr_contact_fingerprint.py $OUTPUT_DIR $INPUT_FILE_1 $INPUT_FILE_2 $INPUT_FILE_3 $INPUT_FILE_4
+python gpcr_atomic_contact_fingerprint.py $OUTPUT_DIR $INPUT_FILE_1 $INPUT_FILE_2 $INPUT_FILE_3 $INPUT_FILE_4
 
 """
 
@@ -81,7 +81,7 @@ def get_edge_and_frameDict(sorted_input_files, labels):
 
 
 			### Atomic level contacts encoding into flareplot json
-			gpcrdb_pair = (gpcrdb1, gpcrdb2)
+			gpcrdb_pair = gpcrdb1 + ":" + gpcrdb2
 			if(itype not in residue_to_atomic_contacts):
 				residue_to_atomic_contacts[itype] = {}
 			if(gpcrdb_pair not in residue_to_atomic_contacts[itype]):
@@ -113,7 +113,7 @@ def fingerprint(OUTPUT_DIR, INPUT_FILES):
 		json_dict["frameDict"] = frameDict
 
 		### Atomic level contacts encoding into flareplot json
-		json_dict["residue_to_atomic_contacts"] = residue_to_atomic_contacts[itype]
+		json_dict['residue_to_atomic_contacts'] = residue_to_atomic_contacts[itype]
 
 
 		with open(out_path, 'w') as outfile:
