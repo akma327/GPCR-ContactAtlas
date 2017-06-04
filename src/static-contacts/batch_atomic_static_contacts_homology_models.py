@@ -15,7 +15,7 @@ USAGE_STR = """
 # homology model or existing crystal structure. Includes atom identity 
 
 # Usage 
-# python batch_static_contacts_homology_models.py 
+# python batch_atomic_static_contacts_homology_models.py 
 
 """
 
@@ -70,7 +70,7 @@ def compute_homology_model_contacts():
 				if(len(atoms) == 2):
 					atoms = [atoms[1], atoms[0]]
 				elif(len(atoms) == 3):
-					atoms = [atoms[2], atoms[1], atoms[0]]
+					atoms = [atoms[1], atoms[0], atoms[2]]
 				elif(len(atoms) == 4):
 					atoms = [atoms[1], atoms[0], atoms[3], atoms[2]]
 				key = (gpcrdb2, gpcrdb1, ":".join(atoms))

@@ -15,13 +15,11 @@ USAGE_STR = """
 # homology model or existing crystal structure. Includes atom identity 
 
 # Usage 
-# python batch_static_contacts_classA_gpcrs.py
+# python batch_atomic_static_contacts_classA_gpcrs.py
 
-# Arguments
-# <-atomic> Optional flag to create atomic level detailed tables
 
 # Example
-python batch_static_contacts_classA_gpcrs.py
+python batch_atomic_static_contacts_classA_gpcrs.py
 
 """
 
@@ -50,7 +48,7 @@ def compute_classA_gpcr_contacts():
 	pdb_to_ligand_dict = pdb_to_ligand()
 	hadded_gpcr_paths = glob.glob(HADDED_CLASS_A_GPCR_PATH + "/*")
 	for i, gpcr_pdb_path in enumerate(hadded_gpcr_paths):
-		# if(i > 0): break
+		if(i > 0): break
 		print(gpcr_pdb_path)
 		pdb, chain = gpcr_pdb_path.split("/")[-1].split("_")[0:2]
 		uniprot = getUniprotCode(pdb)
@@ -94,7 +92,7 @@ def compute_classA_gpcr_contacts():
 				if(len(atoms) == 2):
 					atoms = [atoms[1], atoms[0]]
 				elif(len(atoms) == 3):
-					atoms = [atoms[2], atoms[1], atoms[0]]
+					atoms = [atoms[1], atoms[0], atoms[2]]
 				elif(len(atoms) == 4):
 					atoms = [atoms[1], atoms[0], atoms[3], atoms[2]]
 				key = (gpcrdb2, gpcrdb1, ":".join(atoms))

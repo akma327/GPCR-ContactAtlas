@@ -76,8 +76,8 @@ def get_edge_and_frameDict(sorted_input_files, labels):
 			if(itype not in edge_dict):
 				edge_dict[itype] = {}
 			if((gpcrdb1, gpcrdb2) not in edge_dict[itype]):
-				edge_dict[itype][(gpcrdb1, gpcrdb2)] = []
-			edge_dict[itype][(gpcrdb1, gpcrdb2)].append(i)
+				edge_dict[itype][(gpcrdb1, gpcrdb2)] = set()
+			edge_dict[itype][(gpcrdb1, gpcrdb2)].add(i)
 
 
 			### Atomic level contacts encoding into flareplot json
@@ -105,7 +105,7 @@ def fingerprint(OUTPUT_DIR, INPUT_FILES):
 		edges = []
 		for edge in edge_dict[itype]:
 			name1, name2 = edge
-			frames = edge_dict[itype][edge]
+			frames = sorted(list(edge_dict[itype][edge]))
 			edges.append({"name1": name1, "name2": name2, "frames": frames})
 		
 		json_dict = partial_input

@@ -1,7 +1,7 @@
 # Author: Anthony Kai Kwang Ma
 # Email: anthonyma27@gmail.com, akma327@stanford.edu
 # Date: 05/18/17
-# batch_gpcr_contact_fingerprint.py
+# batch_gpcr_atomic_contact_fingerprint.py
 
 import os
 import sys
@@ -22,16 +22,16 @@ USAGE_STR = """
 # for every cluster of uniprots 
 
 # Example
-OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/fingerprint/051817"
-python batch_gpcr_contact_fingerprint.py $OUTPUT_DIR
+OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-fingerprint/060317"
+python batch_gpcr_atomic_contact_fingerprint.py $OUTPUT_DIR
 
 """
 
 K_MIN_ARG = 2
 
-gpcr_tree_path = "/scratch/PI/rondror/akma327/GPCRContacts/data/fingerprint/general/gpcr_tree.json"
-homology_model_path = "/scratch/PI/rondror/akma327/GPCRContacts/data/static-contacts/homology-models"
-classA_gpcr_path = "/scratch/PI/rondror/akma327/GPCRContacts/data/static-contacts/classA-gpcr-pdbs"
+gpcr_tree_path = "/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-fingerprint/general/gpcr_tree.json"
+homology_model_path = "/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/homology-models"
+classA_gpcr_path = "/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs"
 
 def get_uniprot_clusters():
 	"""
@@ -69,7 +69,7 @@ def driver(OUTPUT_DIR):
 
 		### Run gpcr_contact_fingerprint.py
 		output_path = OUTPUT_DIR + "/" + "cluster_" + str(i)
-		cmd_str = "python gpcr_contact_fingerprint.py " + output_path
+		cmd_str = "python gpcr_atomic_contact_fingerprint.py " + output_path
 		for p in fp:
 			cmd_str += " " + p
 		os.chdir("/scratch/PI/rondror/akma327/GPCRContacts/src/fingerprint")
