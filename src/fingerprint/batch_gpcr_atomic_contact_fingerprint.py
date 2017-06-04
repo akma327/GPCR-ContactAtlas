@@ -22,7 +22,7 @@ USAGE_STR = """
 # for every cluster of uniprots 
 
 # Example
-OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-fingerprint/060317"
+OUTPUT_DIR="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-fingerprint/060417"
 python batch_gpcr_atomic_contact_fingerprint.py $OUTPUT_DIR
 
 """
