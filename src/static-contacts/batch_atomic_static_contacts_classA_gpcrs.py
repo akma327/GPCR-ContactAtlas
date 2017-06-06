@@ -24,9 +24,16 @@ python batch_atomic_static_contacts_classA_gpcrs.py
 """
 
 
+# HADDED_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/structures/classA-gpcr-pdbs"
+# STATIC_CONTACTS_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs"
+# PDB_TO_LIGAND_PATH = "/scratch/PI/rondror/akma327/DynamicNetworks/data/crystal-analysis/ligand-wetness/watermarks/tables/classA_GPCRs_known_ligands.tsv"
+
+
 HADDED_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/structures/classA-gpcr-pdbs"
 STATIC_CONTACTS_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs"
-PDB_TO_LIGAND_PATH = "/scratch/PI/rondror/akma327/DynamicNetworks/data/crystal-analysis/ligand-wetness/watermarks/tables/classA_GPCRs_known_ligands.tsv"
+PDB_TO_LIGAND_PATH = "/scratch/PI/rondror/akma327/GPCRContacts/data/structures/classA-gpcr-pdbs/pdb_to_ligand.tsv"
+
+
 
 def pdb_to_ligand():
 	"""
