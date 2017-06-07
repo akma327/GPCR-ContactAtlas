@@ -23,12 +23,6 @@ python batch_atomic_static_contacts_classA_gpcrs.py
 
 """
 
-
-# HADDED_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/structures/classA-gpcr-pdbs"
-# STATIC_CONTACTS_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs"
-# PDB_TO_LIGAND_PATH = "/scratch/PI/rondror/akma327/DynamicNetworks/data/crystal-analysis/ligand-wetness/watermarks/tables/classA_GPCRs_known_ligands.tsv"
-
-
 HADDED_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/structures/classA-gpcr-pdbs"
 STATIC_CONTACTS_CLASS_A_GPCR_PATH="/scratch/PI/rondror/akma327/GPCRContacts/data/atomic-static-contacts/classA-gpcr-pdbs"
 PDB_TO_LIGAND_PATH = "/scratch/PI/rondror/akma327/GPCRContacts/data/structures/classA-gpcr-pdbs/pdb_to_ligand.tsv"
@@ -53,19 +47,24 @@ def compute_classA_gpcr_contacts():
 		Compute static contacts for all class A gpcr crystals
 	"""
 	pdb_to_ligand_dict = pdb_to_ligand()
-	hadded_gpcr_paths = glob.glob(HADDED_CLASS_A_GPCR_PATH + "/*")
+	hadded_gpcr_paths = glob.glob(HADDED_CLASS_A_GPCR_PATH + "/*pdb")
+	print(hadded_gpcr_paths)
 	for i, gpcr_pdb_path in enumerate(hadded_gpcr_paths):
-		# if(i > 0): break
-		print(gpcr_pdb_path)
-		pdb, chain = gpcr_pdb_path.split("/")[-1].split("_")[0:2]
+		# if(i>0):break
+		print("Iteration", i, gpcr_pdb_path)
+		pdb, chain = gpcr_pdb_path.split("/")[-1].strip(".pdb").split("_")[2:]
+		print(pdb, chain)
 		uniprot = getUniprotCode(pdb)
 		identifier = uniprot + "_" + pdb + "_" + chain
 
 		output_dir = STATIC_CONTACTS_CLASS_A_GPCR_PATH + "/" + identifier
 		output_contacts = output_dir + "/" + identifier + "_contacts.txt"
 
-		ligand = pdb_to_ligand_dict[pdb]
-		calc_command = "python StaticInteractionCalculator_water_indexed_crys.py " + gpcr_pdb_path + " " + output_contacts + " -interlist -sb -pc -ps -ts -vdw -hbbb -hbsb -hbss -wb -wb2 -lwb -lwb2 -hlb -hls -ligand " + ligand
+		if(pdb in pdb_to_ligand_dict):
+			ligand = pdb_to_ligand_dict[pdb]
+			calc_command = "python StaticInteractionCalculator_water_indexed_crys.py " + gpcr_pdb_path + " " + output_contacts + " -interlist -sb -pc -ps -ts -vdw -hbbb -hbsb -hbss -wb -wb2 -lwb -lwb2 -hlb -hls -ligand " + ligand
+		else:
+			calc_command = "python StaticInteractionCalculator_water_indexed_crys.py " + gpcr_pdb_path + " " + output_contacts + " -interlist -sb -pc -ps -ts -vdw -hbbb -hbsb -hbss -wb -wb2"
 		os.chdir("/scratch/PI/rondror/akma327/DynamicNetworks/src/interaction-geometry")
 		os.system(calc_command)
 
@@ -91,9 +90,10 @@ def compute_classA_gpcr_contacts():
 			resi1, atom1 = resatom1
 			resi2, atom2 = resatom2
 
-			gpcrdb1, gpcrdb2 = getGPCRDB(resi1, RESI_TO_GPCRDB), getGPCRDB(resi2, RESI_TO_GPCRDB)
+			gpcrdb1, gpcrdb2 = getGPCRDB(resi1, ligand, RESI_TO_GPCRDB), getGPCRDB(resi2, ligand, RESI_TO_GPCRDB)
 			if(gpcrdb1 == "None" or gpcrdb2 == "None"): continue 
 			if(not ligOrInTM(gpcrdb1) or not ligOrInTM(gpcrdb2)): continue
+			if(residuesTooClose(gpcrdb1, gpcrdb2, contact_type)): continue
 
 			if(flipGpcrdbs(gpcrdb1, gpcrdb2) == True):
 				if(len(atoms) == 2):
@@ -116,6 +116,7 @@ def compute_classA_gpcr_contacts():
 
 		for contact_type in contact_type_to_edges:
 			for gpcrdb1, gpcrdb2, atom_list in contact_type_to_edges[contact_type]:
+				atom_list = atom_list.replace("LIG", ligand)
 				fw.write(gpcrdb1 + "\t" + gpcrdb2 + "\t" + atom_list + "\t" + contact_type + "\n")
 
 		fw.close()

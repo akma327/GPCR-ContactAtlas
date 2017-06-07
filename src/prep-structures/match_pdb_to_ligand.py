@@ -27,7 +27,6 @@ def pdb_to_ligand():
 	pdb_to_ligand_dict = {}
 	f = open(PDB_TO_LIGAND_PATH, 'r')
 	for line in f:
-		print(line)
 		uniprot, class_code, pdb, ligand = line.strip().split("\t")
 		pdb_to_ligand_dict[pdb] = ligand
 
@@ -41,16 +40,14 @@ def find_missing_ligands():
 
 
 	pdb_to_ligand_dict = pdb_to_ligand()
-	print(pdb_to_ligand_dict['5D6L'])
 
-	# gpcr_list = glob.glob(CLASSA_GPCR_PATH + "/*pdb")
-	# for gpcr_path in gpcr_list:
-	# 	pdb = gpcr_path.split("/")[-1].split("_")[2]
-	# 	if (pdb in pdb_to_ligand_dict):
-	# 		# print(pdb_to_ligand_dict[pdb])
-	# 		pass
-	# 	else:
-	# 		print(str(pdb))
+	gpcr_list = glob.glob(CLASSA_GPCR_PATH + "/*pdb")
+	for gpcr_path in gpcr_list:
+		uniprot_pdb = gpcr_path.split("/")[-1].strip(".pdb").split("_")
+		uniprot = (uniprot_pdb[0] + "_" + uniprot_pdb[1]).lower()
+		pdb = uniprot_pdb[2]
+		if (pdb not in pdb_to_ligand_dict):
+			print(uniprot + "\t" + pdb)
 
 
 

@@ -1,52 +1,27 @@
-5NJ6
-2I37
-4ZWJ
-5U09
-4GPO
-4JKV
-5IU8
-5GLI
-5L7D
-4RWD
-5LWE
-4N4W
-5TE5
-4OO9
-5UNF
-4L6R
-4RWA
-4XES
-4Z9G
-4OR2
-5GLH
-5TE3
-4XEE
-5UNH
-5UEN
-5EE7
-4RWS
-4XT1
-2I36
-5UNG
-5NDD
-5CGD
-4QIN
-4O9R
-4K5Y
-4BWB
-2R4S
-5TVN
-3KJ6
-5UIG
-4BV0
-5T04
-4QIM
-3ZEV
-5NDZ
-5CGC
-5VEX
-4XT3
-4GRV
-5T1A
-5UZ7
-5L7I
+cnr1_human	A	5U09	7DY
+smo_human	A	4JKV	1KS
+aa2ar_human	A	5IU8	6DZ
+smo_human	A	4N4W	SNT
+opsd_bovin	A	5TE5	7AB
+grm5_human	A	4OO9	2U8
+agtr2_human	A	5UNF	8ES
+crfr1_human	A	4Z9G	1Q5
+grm1_human	A	4OR2	FM9
+opsd_bovin	A	5TE3	BOG
+agtr2_human	A	5UNH	8EM
+aa1r_human	A	5UEN	DU1
+glp1r_human	A	5EE7	PE5
+agtr2_human	A	5UNG	8ES
+par2_human	A	5NDD	8TZ
+grm5_human	A	5CGD	51E
+smo_human	A	4QIN	SG8
+smo_human	A	4O9R	CY8
+crfr1_human	A	4K5Y	1Q5
+5ht2b_human	A	5TVN	7LD
+aa2ar_human	A	5UIG	8D1
+smo_human	A	4QIM	A8T
+par2_human	A	5NDZ	8UN
+grm5_human	A	5CGC	51D
+glp1r_human	A	5VEX	97V
+ccr2_human	A	5T1A	73R
+smo_human	A	5L7I	VIS
